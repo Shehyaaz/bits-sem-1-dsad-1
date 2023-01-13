@@ -5,6 +5,7 @@
 */ 
 
 #include <iostream>
+#include <random>
 #include <chrono>
 #include <fstream>
 #include <vector>
@@ -85,10 +86,17 @@ void writeToCsv(vector<CSVRow> rows){
   csvFileOut.close();
 }
 
+int getRandomNumber(){
+  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+  default_random_engine generator(seed);
+  uniform_int_distribution<int> distribution(10000,10010);
+  return distribution(generator);
+}
+
 int main(){
   int testInputSizes[] = {10,20,40,80,160,320,640,1280,2560,5120,10240};
   int inputSizesLen = 11;
-  int numTest = 1, testInput = 10001, num = 0;
+  int numTest = 1, num = 0, testInput;
   QList* inputList; // to store number read from file
   string inputFile;
   vector<CSVRow> rows; // vector to store data
@@ -102,7 +110,7 @@ int main(){
     BSTList tree; // empty tree
 
 
-    inputFile = "test/txt/rev-sorted-{}-input.txt";
+    inputFile = "test/txt/random-{}-input.txt";
     inputFile.replace(inputFile.find('{'),2,to_string(testInputSizes[i]));
     inputList = readFromTxtFile(inputFile);
     // insert elements from file first
@@ -127,6 +135,8 @@ int main(){
         2. worst case input(search): key is not in the queue or at the end
       */
       // qarray insert
+      testInput = getRandomNumber();
+
       startTime = std::chrono::high_resolution_clock::now();
 
       qarr.enqueue(testInput+j);
@@ -136,6 +146,8 @@ int main(){
       rows.push_back(CSVRow("q_array", "insert", testInputSizes[i], qarr.getSize(), span.count()));
       
       // qarray search
+      testInput = getRandomNumber();
+
       startTime = std::chrono::high_resolution_clock::now();
 
       qarr.search(testInput+j);
@@ -145,6 +157,8 @@ int main(){
       rows.push_back(CSVRow("q_array", "search", testInputSizes[i], qarr.getSize(), span.count()));
       
       // qarray delete
+      testInput = getRandomNumber();
+
       startTime = std::chrono::high_resolution_clock::now();
 
       qarr.dequeue();
@@ -160,6 +174,8 @@ int main(){
         1. worst case input(search): key is not in the queue or at the end
       */
       // qlist insert
+      testInput = getRandomNumber();
+
       startTime = std::chrono::high_resolution_clock::now();
 
       qlist.enqueue(testInput+j);
@@ -169,6 +185,8 @@ int main(){
       rows.push_back(CSVRow("q_list", "insert", testInputSizes[i], qlist.getSize(), span.count()));
       
       // qlist search
+      testInput = getRandomNumber();
+      
       startTime = std::chrono::high_resolution_clock::now();
 
       qlist.search(testInput+j);
@@ -178,6 +196,8 @@ int main(){
       rows.push_back(CSVRow("q_list", "search", testInputSizes[i], qlist.getSize(), span.count()));
       
       // qlist delete
+      testInput = getRandomNumber();
+
       startTime = std::chrono::high_resolution_clock::now();
 
       qlist.dequeue();
@@ -192,6 +212,8 @@ int main(){
         2. worst case input(search): key is not in the list or at the end
       */
       // sorted list insert
+      testInput = getRandomNumber();
+
       startTime = std::chrono::high_resolution_clock::now();
 
       list.insert(testInput);
@@ -201,6 +223,8 @@ int main(){
       rows.push_back(CSVRow("sorted_list", "insert", testInputSizes[i], list.getSize(), span.count()));
       
       // sorted list search
+      testInput = getRandomNumber();
+
       startTime = std::chrono::high_resolution_clock::now();
 
       list.search(testInput);
@@ -210,6 +234,8 @@ int main(){
       rows.push_back(CSVRow("sorted_list", "search", testInputSizes[i], list.getSize(), span.count()));
       
       // sorted list delete
+      testInput = getRandomNumber();
+
       startTime = std::chrono::high_resolution_clock::now();
 
       list.remove(testInput);
@@ -224,6 +250,8 @@ int main(){
         2. worst case input(search): key is not in the tree or at the end
       */
       // bst insert
+      testInput = getRandomNumber();
+
       startTime = std::chrono::high_resolution_clock::now();
 
       tree.rootNode = tree.insert(tree.rootNode, testInput);
@@ -233,6 +261,8 @@ int main(){
       rows.push_back(CSVRow("binary_search_tree", "insert", testInputSizes[i], tree.getSize(), span.count()));
       
       // bst search
+      testInput = getRandomNumber();
+
       startTime = std::chrono::high_resolution_clock::now();
 
       tree.search(tree.rootNode, testInput);
@@ -242,6 +272,8 @@ int main(){
       rows.push_back(CSVRow("binary_search_tree", "search", testInputSizes[i], tree.getSize(), span.count()));
       
       // sorted list delete
+      testInput = getRandomNumber();
+
       startTime = std::chrono::high_resolution_clock::now();
 
       tree.rootNode = tree.remove(tree.rootNode, testInput);
